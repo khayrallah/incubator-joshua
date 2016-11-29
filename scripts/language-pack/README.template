@@ -16,6 +16,12 @@ For information on the data used to construct this language pack,
 please see the CREDITS file, and to see its performance on a range of
 different publicly available test sets, see BENCHMARKS.
 
+A small number of example sentences are provided in 'example.<SRC>', along
+with a human reference translation for each in 'example.<TRG>'.
+
+If you have comments, questions, or concerns, please email Joshua user
+support: dev@joshua.apache.org. 
+
 This language pack was released on <DATE>.
 
 Quick Start
@@ -27,9 +33,9 @@ To run the language pack, invoke the command
 The Joshua decoder will start running, accepting input from STDIN and writing to
 STDOUT. Joshua expects its input in the form of a single sentence per line. Each
 sentence should first be piped through `prepare.sh`, which normalizes and
-tokenizes the input for the language pack's source language.
+tokenizes the input for the language pack's source language. 
 
-    cat sentences.txt | prepare.sh | joshua > output.txt
+    cat example.<SRC> | prepare.sh | joshua > output.<TRG>
 
 It takes some time (sometimes as much as a minute) to load all of the models
 into memory, which means there is high latency from startup until the first
@@ -42,14 +48,36 @@ option
 
 You can then connect directly to the socket using nc or telnet:
 
-    cat sentences.txt | prepare.sh | nc localhost 5674 > output.txt
+    cat example.<SRC> | prepare.sh | nc localhost 5674 > output.<TRG>
 
-You can set the RESTful interface by also passing '-server-type http':
+You can set the RESTful interface by also passing `-server-type http`:
 
     joshua -server-port 5674 -server-type http
 
 The RESTful interface is used when running the browser demo (see web/index.html)
 or when using the Joshua Translation Engine.
+
+Web demo
+--------
+See the web/ directory for a web-based AJAX interface to Java. One feature of this
+approach is that it permits you to add custom words and phrases to Joshua, which then
+become translation options for the decoder. To start the web demo,
+
+1. Start Joshua in HTTP server mode, as described above
+
+       ./joshua -server-port 5674 -server-type http
+
+   This starts Joshua running on port 5674.
+
+2. Load the web interface, passing it to server and port you are using
+
+       firefox "web/index.html?server=localhost&port=5674"
+
+   Any browser will do.
+
+You can then translate text, entering one sentence per line, in the main box. You can
+also experiment with adding words and phrases. These are then saved to a custom grammar.
+These rules can be managed on the "Rules" tab.
 
 Runtime options
 ---------------

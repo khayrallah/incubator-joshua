@@ -1,4 +1,18 @@
 #!/usr/bin/env perl
+# Licensed to the Apache Software Foundation (ASF) under one or more
+# contributor license agreements.  See the NOTICE file distributed with
+# this work for additional information regarding copyright ownership.
+# The ASF licenses this file to You under the Apache License, Version 2.0
+# (the "License"); you may not use this file except in compliance with
+# the License.  You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 
 # Sample Tokenizer
 # written by Josh Schroeder, based on code by Philipp Koehn
@@ -10,6 +24,11 @@ use warnings;
 use strict;
 use File::Basename qw/dirname/;
 
+my $JOSHUA;
+BEGIN { 
+  $JOSHUA = $ENV{JOSHUA} || ".";
+}
+
 my %NONBREAKING_PREFIX = ();
 my $language = "en";
 my $QUIET = 1;
@@ -18,7 +37,7 @@ my $PREFIX_DIR = find_nonbreaking_prefixes();
 
 sub find_nonbreaking_prefixes {
   # look in the following locations until you find one
-  my @prefixes = ( dirname($0), "$ENV{JOSHUA}/scripts/preparation" );
+  my @prefixes = ( dirname($0), "$JOSHUA/scripts/preparation" );
   foreach my $prefix (@prefixes) {
     my $path = "$prefix/nonbreaking_prefixes";
     return $path if -e $path;
@@ -49,7 +68,7 @@ if (!$QUIET) {
 
 load_prefixes($language,\%NONBREAKING_PREFIX);
 
-if (scalar(%NONBREAKING_PREFIX) eq 0){
+if (scalar(keys(%NONBREAKING_PREFIX)) == 0 && ! $QUIET){
 	print STDERR "Warning: No known abbreviations for language '$language'\n";
 }
 
@@ -262,7 +281,7 @@ sub load_prefixes {
 	#default back to English if we don't have a language-specific prefix file
 	if (!(-e $prefixfile)) {
 		$prefixfile = "$PREFIX_DIR/nonbreaking_prefix.en";
-		print STDERR "WARNING: No known abbreviations for language '$language', attempting fall-back to English version...\n";
+		print STDERR "WARNING: No known abbreviations for language '$language', attempting fall-back to English version...\n" unless $QUIET;
 		die ("ERROR: No abbreviations files found in $PREFIX_DIR\n") unless (-e $prefixfile);
 	}
 	

@@ -1,4 +1,4 @@
-#lm config
+#!/usr/bin/env python
 # Licensed to the Apache Software Foundation (ASF) under one or more
 # contributor license agreements.  See the NOTICE file distributed with
 # this work for additional information regarding copyright ownership.
@@ -14,13 +14,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-use_srilm=true
-lm_ceiling_cost=100
-use_left_euqivalent_state=false
-use_right_euqivalent_state=false
-order=5
+import os
+import argparse
 
-remote_symbol_tbl=/home/zli/work/zli@gale/mt06-data/gale_p3_run/remote.symbol.tbl
+parser = argparse.ArgumentParser(description='Return canonical path')
+parser.add_argument('file', help='File or directory to absolutize')
+args = parser.parse_args()
 
-remote_lm_server_port=9000
-
+print os.path.realpath(args.file)

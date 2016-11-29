@@ -1,4 +1,18 @@
 #!/usr/bin/perl
+# Licensed to the Apache Software Foundation (ASF) under one or more
+# contributor license agreements.  See the NOTICE file distributed with
+# this work for additional information regarding copyright ownership.
+# The ASF licenses this file to You under the Apache License, Version 2.0
+# (the "License"); you may not use this file except in compliance with
+# the License.  You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 $| = 1;
 
 my $JOSHUA;
@@ -39,7 +53,7 @@ while (my $chunkno = <>) {
   system("mkdir","-p", $chunkdir);
 
   if ($args{aligner} eq "giza") {
-    run_giza($chunkdir, $chunkno, $args{num_threads} > 1);
+    run_giza($chunkdir, $chunkno, 0);
   } elsif ($args{aligner} eq "berkeley") {
     run_berkeley_aligner($chunkdir, $chunkno, $aligner_conf);
   } elsif ($args{aligner} eq "jacana") {
@@ -80,8 +94,8 @@ sub run_berkeley_aligner {
   $cachepipe->cmd("berkeley-aligner-chunk-$chunkno",
                   "java -d64 -Xmx$args{aligner_mem} -jar $JOSHUA/ext/berkeleyaligner/distribution/berkeleyaligner.jar ++alignments/$chunkno/word-align.conf",
                   "alignments/$chunkno/word-align.conf",
-                  "$args{train_dir}/splits/corpus.$args{source}.$chunkno",
-                  "$args{train_dir}/splits/corpus.$args{target}.$chunkno",
+                  "$args{train_dir}/splits/$chunkno/corpus.$args{source}",
+                  "$args{train_dir}/splits/$chunkno/corpus.$args{target}",
                   "$chunkdir/training.align");
 }
 
