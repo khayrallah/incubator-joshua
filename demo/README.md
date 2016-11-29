@@ -15,7 +15,7 @@ There are two steps:
    
        $JOSHUA/bin/joshua -config demo.config -server-port 5675
        
-1. Load the index.html file, and make sure the values in the "Parameters"
+2. Load the index.html file, and make sure the values in the "Parameters"
    tab match your server settings above. You can also pass these values
    in the query string, e.g.,
 
