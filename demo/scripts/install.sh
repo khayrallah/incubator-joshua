@@ -1,4 +1,7 @@
-#!/bin/bash
+#! /bin/bash
+
+#usage: ./install.sh or bash install.sh 
+#DO NOT RUN sh install.sh on ubuntu, this needs to run in bash not dash 
 
 #install dependencies
 echo "install dependencies"
